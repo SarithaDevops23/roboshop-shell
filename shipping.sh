@@ -26,7 +26,7 @@ systemctl daemon-reload
 echo -e "installing mysql community version"
 yum install mysql -y  &>>/tmp/roboshop.log
 echo -e "Load schema"
-mysql -h mysqldb-dev.devops23.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>/tmp/roboshop.log
+mysql -h mysql-dev.devops23.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>/tmp/roboshop.log
 
 systemctl enable shipping &>>/tmp/roboshop.log
 echo -e "shipping is starting"
