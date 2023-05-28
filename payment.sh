@@ -3,7 +3,7 @@ yum install python36 gcc python3-devel -y &>>/tmp/roboshop.log
 
 echo "adding roboshop user"
 useradd roboshop &>>/tmp/roboshop.log
-echo"removing and creating application dir"
+echo "removing and creating application dir"
 rm -rf /app &>>/tmp/roboshop.log
 mkdir /app 
 echo "downloading applicatn content"
