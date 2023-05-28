@@ -23,7 +23,7 @@ cp /root/roboshop-shell/user.service /etc/systemd/system/user.service
 
 echo -e "\e[33m daemon reload \e[0m"
 systemctl daemon-reload
-systemctl enable user 
+systemctl enable user &>>/tmp/roboshop.log
 echo -e "\e[33m start user\e[0m"
 systemctl restart user
 
@@ -33,5 +33,5 @@ cp /root/roboshop-shell/mongodb.repo /etc/yum.repos.d/mongodb.repo
 echo -e "\e[33m installing mongodb client\e[0m"
 yum install mongodb-org-shell -y &>>/tmp/roboshop.log
 echo -e "\e[33m load schema\e[0m"
-mongo --host mongodb-dev.devops23.store </app/schema/user.js
+mongo --host mongodb-dev.devops23.store </app/schema/user.js &>>/tmp/roboshop.log
 
