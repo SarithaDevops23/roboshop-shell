@@ -10,6 +10,10 @@ echo -e "\e[33munzipping downloaded content\e[0m"
 cd /usr/share/nginx/html 
 unzip /tmp/frontend.zip &>>/tmp/roboshop.log
 
+echo -e "\e[33mupdate frontend configuration\e[0m"
+cp roboshop.conf /etc/nginx/default.d/roboshop.conf
+
+
 systemctl enable nginx &>>/tmp/roboshop.log
 systemctl restart nginx &>>/tmp/roboshop.log
 echo -e "\e[33minstallation done\e[0m"
