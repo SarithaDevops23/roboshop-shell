@@ -34,11 +34,11 @@ nodejs(){
 	yum install mongodb-org-shell -y &>>output_log
 
 	echo -e "${color} loading schema${nocolor}"
-	mongo --host mongodb-dev.devops23.store </app/schema/$component.js $output_log
+	mongo --host mongodb-dev.devops23.store </app/schema/$component.js &>>$output_log
 
 	echo -e "${color} daemon reload${nocolor}"
 	systemctl daemon-reload
 	systemctl enable $component
 	echo -e "${color} restarting $component ${nocolor}"
-	systemctl restart $component &>>/tmp/roboshop.log
+	systemctl restart $component &>>$output_log
 }
