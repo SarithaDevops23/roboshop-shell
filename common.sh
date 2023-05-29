@@ -28,6 +28,15 @@ nodejs(){
 	echo -e "${color} setup catalogue.servive into systemd directory ${nocolor}"
 	cp /root/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>$output_log
 
+	mongodb_load_schema
+	echo -e "${color} daemon reload${nocolor}"
+	systemctl daemon-reload
+	systemctl enable $component
+	echo -e "${color} restarting $component ${nocolor}"
+	systemctl restart $component &>>$output_log
+}
+
+mongodb_load_schema(){
 	echo -e "${color} copying mongodb repo in order to load schema we need this${nocolor}"
 	cp /root/roboshop-shell/mongodb.repo /etc/yum.repos.d/mongodb.repo 
 	echo -e "${color} installing mongodb client ${nocolor}"
@@ -36,9 +45,4 @@ nodejs(){
 	echo -e "${color} loading schema${nocolor}"
 	mongo --host mongodb-dev.devops23.store </app/schema/$component.js &>>$output_log
 
-	echo -e "${color} daemon reload${nocolor}"
-	systemctl daemon-reload
-	systemctl enable $component
-	echo -e "${color} restarting $component ${nocolor}"
-	systemctl restart $component &>>$output_log
 }
