@@ -1,13 +1,15 @@
-echo -e "\e[33m disabling inbuilt default mysql v8, we need v5.7\e[0m"
+source common.sh
+
+echo -e "${color} disabling inbuilt default mysql v8, we need v5.7${nocolor}"
 yum module disable mysql -y &>>/tmp/roboshop.log
-echo -e "\e[33m settinup repo file in yum repos \e[0m"
+echo -e "${color} settinup repo file in yum repos ${nocolor}"
 cp /root/roboshop-shell/mysql.repo /etc/yum.repos.d/mysql.repo &>>/tmp/roboshop.log
-echo -e "\e[33m installing mysql community server\e[0m"
+echo -e "${color} installing mysql community server${nocolor}"
 yum install mysql-community-server -y &>>/tmp/roboshop.log
-echo -e "\e[33m mysql starting\e[0m"
+echo -e "${color} mysql starting${nocolor}"
 systemctl enable mysqld &>>/tmp/roboshop.log
 systemctl restart mysqld  
-echo -e "\e[33m changing root password for mysql\e[0m"
+echo -e "${color} changing root password for mysql${nocolor}"
 mysql_secure_installation --set-root-pass RoboShop@1 &>>/tmp/roboshop.log
-echo -e "\e[33mchecking the userand passd working or nt\e[0m"
+echo -e "\e[33mchecking the userand passd working or nt${nocolor}"
 mysql -uroot -pRoboShop@1 &>>/tmp/roboshop.log

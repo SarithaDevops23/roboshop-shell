@@ -1,4 +1,6 @@
-echo -e "\e[33m installing maven\e[0m"
+source common.sh
+
+echo -e "${color} installing maven${nocolor}"
 yum install maven -y &>>/tmp/roboshop.log
 
 echo -e "useradd"
