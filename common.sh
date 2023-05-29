@@ -28,7 +28,6 @@ nodejs(){
 	echo -e "${color} setup catalogue.servive into systemd directory ${nocolor}"
 	cp /root/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>$output_log
 
-	mongodb_load_schema
 	echo -e "${color} daemon reload${nocolor}"
 	systemctl daemon-reload
 	systemctl enable $component
