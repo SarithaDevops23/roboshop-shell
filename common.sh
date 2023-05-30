@@ -2,30 +2,29 @@ output_log="/tmp/roboshop.log"
 color="\e[33m"
 nocolor="\e[0m"
 
-nodejs(){
-	echo -e "${color}configuring nodejs repos${nocolor}"
-    curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$output_log
+app_user=roboshop
+#mysql Password
+mysql_password="RoboShop@1"
+#rabbitmq-Password
+rabbitmq_password="roboshop123"
 
-	echo -e "${color}installing nodejs${nocolor}"
-	yum install nodejs -y &>>$output_log
-
+application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
-	useradd roboshop
+	useradd $app_user
 
 	echo -e $color" creating app dir"${nocolor}
 	rm -rf /app
 	mkdir /app 
 
-	echo -e "${color} downloading catalogue content ${nocolor}"
+	echo -e "${color} downloading application content ${nocolor}"
 	curl -o /tmp/$component.zip https://roboshop-artifacts.s3.amazonaws.com/$component.zip &>>$output_log
 	cd /app 
 	echo -e "${color} extracting downloaded content in application dirctory${nocolor}"
 	unzip /tmp/$component.zip &>>$output_log
-	cd /app 
-	echo -e "${color} installing nodejs dependencies npm ${nocolor}"
-	npm install &>>$output_log
+}
 
-	echo -e "${color} setup catalogue.servive into systemd directory ${nocolor}"
+Copying_Service_systemd_restart(){
+	echo -e "${color} setup servive file into systemd directory ${nocolor}"
 	cp /root/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>$output_log
 
 	echo -e "${color} daemon reload${nocolor}"
@@ -33,6 +32,24 @@ nodejs(){
 	systemctl enable $component
 	echo -e "${color} restarting $component ${nocolor}"
 	systemctl restart $component &>>$output_log
+}
+
+nodejs(){
+	echo -e "${color}configuring nodejs repos${nocolor}"
+    curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$output_log
+
+	echo -e "${color}installing nodejs${nocolor}"
+	yum install nodejs -y &>>$output_log
+
+	application_preSetup
+
+	cd /app 
+	echo -e "${color} installing nodejs dependencies npm ${nocolor}"
+	npm install &>>$output_log
+
+	Copying_Service_systemd_restart
+
+	
 }
 
 mongodb_load_schema(){

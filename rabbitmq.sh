@@ -1,3 +1,5 @@
+source common.sh
+
 echo "configuring yum repos using script"
 curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash &>>/tmp/roboshop.log
 echo "configuring yum repo for rabbitmq"
@@ -9,6 +11,6 @@ systemctl enable rabbitmq-server &>>/tmp/roboshop.log
 systemctl restart rabbitmq-server 
 
 echo "adding rabbitmq user"
-rabbitmqctl add_user roboshop roboshop123 &>>/tmp/roboshop.log
+rabbitmqctl add_user roboshop $rabbitmq_password &>>/tmp/roboshop.log
 echo "setting permissions to user and DONE"
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>/tmp/roboshop.log

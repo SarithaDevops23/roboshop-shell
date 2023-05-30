@@ -1,35 +1,20 @@
 source common.sh
+component=shipping
 
 echo -e "${color} installing maven${nocolor}"
-yum install maven -y &>>/tmp/roboshop.log
+yum install maven -y &>>$output_log
 
-echo -e "useradd"
-useradd roboshop &>>/tmp/roboshop.log
-echo -e "remove existing application dir"
-rm -rf /app &>>/tmp/roboshop.log
-echo -e "create application dir"
-mkdir /app &>>/tmp/roboshop.log
-echo -e "downloading application content"
-curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping.zip &>>/tmp/roboshop.log
-cd /app 
-echo -e "extracting content"
-unzip /tmp/shipping.zip &>>/tmp/roboshop.log
+application_preSetup
 
 cd /app 
-echo -e "clean package"
-mvn clean package &>>/tmp/roboshop.log
+echo -e "${color}clean package${nocolor}"
+mvn clean package &>>$output_log
+mv target/$component-1.0.jar $component.jar &>>$output_log
 
-mv target/shipping-1.0.jar shipping.jar &>>/tmp/roboshop.log
 
-echo -e "copying service file into systemd"
-cp /root/roboshop-shell/shipping.service /etc/systemd/system/shipping.service &>>/tmp/roboshop.log
-systemctl daemon-reload 
+echo -e "${color}installing mysql community version${nocolor}"
+yum install mysql -y  &>>$output_log
+echo -e "${color}Load schema${nocolor}"
+mysql -h mysql-dev.devops23.store -uroot -p$mysql_password < /app/schema/$component.sql &>>$output_log
 
-echo -e "installing mysql community version"
-yum install mysql -y  &>>/tmp/roboshop.log
-echo -e "Load schema"
-mysql -h mysql-dev.devops23.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>/tmp/roboshop.log
-
-systemctl enable shipping &>>/tmp/roboshop.log
-echo -e "shipping is starting"
-systemctl restart shipping
+Copying_Service_systemd_restart
