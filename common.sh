@@ -13,11 +13,11 @@ application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
 	# id exit status 0 means user exists, 1 means no user found
 	id $app_user
-	if[ $? -ne 0 ]; then
+	if[ $? -ne 0 ];
 		useradd $app_user
 	fi
 
-	if[ $? -ne 0 ]; then
+	if[ $? -ne 0 ];
 		echo "Failed"
 	else
 		echo "Success"
