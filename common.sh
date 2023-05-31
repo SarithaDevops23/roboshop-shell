@@ -12,9 +12,9 @@ application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
 	# id exit status 0 means user exists, 1 means no user found
 	id $app_user
-	if [ $? -ne 0 ]
-	then
+	if [ $? -ne 0 ]; then
 		useradd $app_user
+	fi
 	
 
 	if [ $? -eq 0 ]; then
@@ -31,7 +31,8 @@ application_preSetup(){
 	curl -o /tmp/$component.zip https://roboshop-artifacts.s3.amazonaws.com/$component.zip &>>$output_log
 	cd /app 
 	echo -e "${color} extracting downloaded content in application dirctory${nocolor}"
-	unzip /tmp/$component.zip &>>$output_log }
+	unzip /tmp/$component.zip &>>$output_log 
+}
 
 Copying_Service_systemd_restart(){
 	echo -e "${color} setup servive file into systemd directory ${nocolor}"
@@ -57,6 +58,9 @@ nodejs(){
 	echo -e "${color} installing nodejs dependencies npm ${nocolor}"
 	npm install &>>$output_log
     Copying_Service_systemd_restart
+	if [$0 != cart]; then
+		mongodb_load_schema
+	fi
 }
 
 mongodb_load_schema(){

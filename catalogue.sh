@@ -3,5 +3,3 @@ component=catalogue
 
 
 nodejs
-
-mongodb_load_schema
