@@ -13,16 +13,15 @@ application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
 	# id exit status 0 means user exists, 1 means no user found
 	id $app_user
-	if[ $? -ne 0 ]
+	if [ $? -ne 0 ]
 	then
 		useradd $app_user
 	
 
-	if [ $? -ne 0 ]
-	then
-		echo "Failed"
+	if [ $? -eq 0 ]; then
+		echo SUCCESS
 	else
-		echo "Success"
+		echo FAILURE
 	fi
 
 	echo -e $color" creating app dir"${nocolor}
@@ -59,10 +58,7 @@ nodejs(){
 	cd /app 
 	echo -e "${color} installing nodejs dependencies npm ${nocolor}"
 	npm install &>>$output_log
-
-	Copying_Service_systemd_restart
-
-	
+    Copying_Service_systemd_restart
 }
 
 mongodb_load_schema(){
@@ -70,8 +66,6 @@ mongodb_load_schema(){
 	cp /root/roboshop-shell/mongodb.repo /etc/yum.repos.d/mongodb.repo 
 	echo -e "${color} installing mongodb client ${nocolor}"
 	yum install mongodb-org-shell -y &>>output_log
-
 	echo -e "${color} loading schema${nocolor}"
 	mongo --host mongodb-dev.devops23.store </app/schema/$component.js &>>$output_log
-
 }
