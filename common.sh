@@ -65,5 +65,5 @@ mongodb_load_schema(){
 	echo -e "${color} installing mongodb client ${nocolor}"
 	yum install mongodb-org-shell -y &>>output_log
 	echo -e "${color} loading schema${nocolor}"
-	mongo --host mongodb-dev.devops23.store </app/schema/$component.js &>>$output_log
+	mongo --host mongodb-dev.devops23.store </app/schema/$component.js &>>$output_log 
 }
