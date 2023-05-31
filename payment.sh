@@ -1,6 +1,7 @@
 source common.sh
 component=payment
-rabbitmq_password=$1
+rabbitmq_user=$1
+rabbitmq_password=$2
 
 echo "installing python"
 yum install python36 gcc python3-devel -y &>>$output_log

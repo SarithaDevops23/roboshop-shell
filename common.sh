@@ -46,7 +46,9 @@ Copying_Service_systemd_restart(){
 	cp /root/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>$output_log
 
 	if [ $component == payment ]; then
+		sed -i -e "s/rabbitmq_user/$rabbitmq_user/" /root/roboshop-shell/$component.service
 		sed -i -e "s/rabbitmq_password/$rabbitmq_password/" /root/roboshop-shell/$component.service
+
 	fi
 
 	printOutput
