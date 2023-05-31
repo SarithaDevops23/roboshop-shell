@@ -8,6 +8,14 @@ mysql_password="RoboShop@1"
 #rabbitmq-Password
 rabbitmq_password="roboshop123"
 
+printOutput(){
+	if [ $? -eq 0 ]; then
+		echo SUCCESS
+	else
+		echo FAILURE
+	fi
+}
+
 application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
 	# id exit status 0 means user exists, 1 means no user found
@@ -17,48 +25,55 @@ application_preSetup(){
 	fi
 	
 
-	if [ $? -eq 0 ]; then
-		echo SUCCESS
-	else
-		echo FAILURE
-	fi
+	printOutput
 
 	echo -e $color" creating app dir"${nocolor}
 	rm -rf /app
 	mkdir /app 
 
+	printOutput
+
 	echo -e "${color} downloading application content ${nocolor}"
 	curl -o /tmp/$component.zip https://roboshop-artifacts.s3.amazonaws.com/$component.zip &>>$output_log
+	printOutput
 	cd /app 
 	echo -e "${color} extracting downloaded content in application dirctory${nocolor}"
 	unzip /tmp/$component.zip &>>$output_log 
+	printOutput
 }
 
 Copying_Service_systemd_restart(){
 	echo -e "${color} setup servive file into systemd directory ${nocolor}"
 	cp /root/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>$output_log
 
+	printOutput
+
 	echo -e "${color} daemon reload${nocolor}"
 	systemctl daemon-reload
 	systemctl enable $component
+
+	printOutput
 	echo -e "${color} restarting $component ${nocolor}"
 	systemctl restart $component &>>$output_log
+	printOutput
 }
 
 nodejs(){
 	echo -e "${color}configuring nodejs repos${nocolor}"
     curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$output_log
-
+	printOutput
 	echo -e "${color}installing nodejs${nocolor}"
 	yum install nodejs -y &>>$output_log
-
+	printOutput
 	application_preSetup
 
 	cd /app 
 	echo -e "${color} installing nodejs dependencies npm ${nocolor}"
 	npm install &>>$output_log
+	printOutput
     Copying_Service_systemd_restart
-	if [ $0 != cart ]; then
+	echo filename is $0
+	if [ $component != cart ]; then
 		mongodb_load_schema
 	fi
 }
