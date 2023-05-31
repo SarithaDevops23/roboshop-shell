@@ -5,8 +5,7 @@ nocolor="\e[0m"
 app_user=roboshop
 #mysql Password
 mysql_password="RoboShop@1"
-#rabbitmq-Password
-rabbitmq_password="roboshop123"
+
 
 printOutput(){
 	if [ $? -eq 0 ]; then
@@ -46,11 +45,15 @@ Copying_Service_systemd_restart(){
 	echo -e "${color} setup servive file into systemd directory ${nocolor}"
 	cp /root/roboshop-shell/$component.service /etc/systemd/system/$component.service &>>$output_log
 
+	if [ $component == payment ]; then
+		sed -i "s/rabbitmq_password/$1" /root/roboshop-shell/$component.service
+	fi
+
 	printOutput
 
 	echo -e "${color} daemon reload${nocolor}"
-	systemctl daemon-reload
-	systemctl enable $component
+	systemctl daemon-reload 
+	systemctl enable $component &>>$output_log
 
 	printOutput
 	echo -e "${color} restarting $component ${nocolor}"
@@ -72,7 +75,6 @@ nodejs(){
 	npm install &>>$output_log
 	printOutput
     Copying_Service_systemd_restart
-	echo filename is $0
 	if [ $component != cart ]; then
 		mongodb_load_schema
 	fi
