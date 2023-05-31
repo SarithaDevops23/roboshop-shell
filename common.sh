@@ -1,6 +1,7 @@
 output_log="/tmp/roboshop.log"
 color="\e[33m"
 nocolor="\e[0m"
+Dev_Url="-dev.devops23.store";
 
 app_user=roboshop
 #mysql Password
@@ -10,7 +11,16 @@ rabbitmq_password="roboshop123"
 
 application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
-	useradd $app_user
+	# id exit status 0 means user exists, 1 means no user found
+	id $app_user
+	if[ $? -ne 0 ]; then
+		useradd $app_user
+	fi
+
+	if[ $? -ne 0 ]; then
+		echo "Failed"
+	else
+		echo "Success"
 
 	echo -e $color" creating app dir"${nocolor}
 	rm -rf /app
