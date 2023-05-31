@@ -11,7 +11,7 @@ rabbitmq_password="roboshop123"
 application_preSetup(){
 	echo -e "${color} user adding ${nocolor}"
 	# id exit status 0 means user exists, 1 means no user found
-	id $app_user
+	id $app_user &>>{output_log}
 	if [ $? -ne 0 ]; then
 		useradd $app_user
 	fi
@@ -58,7 +58,7 @@ nodejs(){
 	echo -e "${color} installing nodejs dependencies npm ${nocolor}"
 	npm install &>>$output_log
     Copying_Service_systemd_restart
-	if [$0 != cart]; then
+	if [ $0 != cart ]; then
 		mongodb_load_schema
 	fi
 }
