@@ -1,7 +1,6 @@
 output_log="/tmp/roboshop.log"
 color="\e[33m"
 nocolor="\e[0m"
-Dev_Url="-dev.devops23.store";
 
 app_user=roboshop
 #mysql Password
@@ -32,8 +31,7 @@ application_preSetup(){
 	curl -o /tmp/$component.zip https://roboshop-artifacts.s3.amazonaws.com/$component.zip &>>$output_log
 	cd /app 
 	echo -e "${color} extracting downloaded content in application dirctory${nocolor}"
-	unzip /tmp/$component.zip &>>$output_log
-}
+	unzip /tmp/$component.zip &>>$output_log }
 
 Copying_Service_systemd_restart(){
 	echo -e "${color} setup servive file into systemd directory ${nocolor}"
